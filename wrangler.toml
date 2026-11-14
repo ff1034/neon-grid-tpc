@@ -3,9 +3,14 @@ main = "server/worker.js"
 compatibility_date = "2025-09-01"
 workers_dev = true
 
-# 遊戲網頁就是專案根目錄（index.html、src/、vendor/、models/）；不要上傳的東西列在 .assetsignore
+# 部署（和 wrangler dev）之前先把遊戲網頁複製到 dist/：只有 index.html、src、vendor、models
+[build]
+command = "node scripts/build-assets.mjs"   # 要在專案資料夾執行 wrangler（Cloudflare 的建置環境就是）
+watch_dir = ["src", "vendor", "models", "index.html"]
+
+# 遊戲網頁由 Workers 靜態資源提供，只上傳 dist/（不會碰到 node_modules 等大檔案）
 [assets]
-directory = "."
+directory = "./dist"
 binding = "ASSETS"
 
 # 一個 Durable Object 房間負責裁判（命中、傷害、計分、重生、機器人）

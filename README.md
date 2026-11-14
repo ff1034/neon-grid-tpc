@@ -206,7 +206,8 @@ three-player-controller 的移動和碰撞都在瀏覽器裡計算，做不到�
 
 部署設定的細節：
 
-- 遊戲網頁也由同一個 Worker 提供：靜態資源就是專案根目錄。`.assetsignore` 列出不上傳的東西：`server/`、`blender/`、`screenshots/`、說明文件等。
+- 遊戲網頁也由同一個 Worker 提供。部署前 `wrangler.toml` 的 `[build]` 會自動執行 `scripts/build-assets.mjs`，只把 `index.html`、`src/`、`vendor/`、`models/` 複製到 `dist/`，Cloudflare 只上傳 `dist/`（約 68 個檔案）。`node_modules` 裡有 129 MB 的檔案，超過 Workers 單檔 25 MB 上限，所以不能把整個專案資料夾當靜態資源。
+- 要在專案資料夾裡執行 `npx wrangler dev`／`deploy`：建置指令用的是相對路徑。
 - Durable Object 用 SQLite 型，免費方案就能用（跟原版相同）。
 - 只有一個房間（`idFromName('main')`），最多 8 個真人。
 - 前端和伺服器要用同一版程式。改了 `src/` 就重新 `npx wrangler deploy`；`NET_VERSION` 不同時，瀏覽器會提示重新整理。

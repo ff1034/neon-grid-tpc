@@ -24,15 +24,15 @@
 
 | 不要上傳 | 原因 |
 | --- | --- |
-| `node_modules` | 安裝 wrangler 時產生的，有上千個檔案，而且裡面有超過 25 MB 的檔案，網頁會直接拒絕 |
+| `node_modules`、`dist` | 安裝 wrangler／部署時產生的，有上千個檔案，而且裡面有超過 25 MB 的檔案，網頁會直接拒絕 |
 | `.wrangler` | `wrangler dev` 產生的暫存檔 |
 | `blender\src`（ual.glb） | 裡面 8 個 fly* 動作授權不明，不要公開散布 |
 | `blender\out` | Blender 中間檔，遊戲用的是 `models\` 裡的複本 |
 
 在檔案總管打開 `C:\esp\neon-grid-tpc`，按住 **Ctrl** 逐一點選下面這些（共約 80 個檔案）：
 
-- 檔案：`.assetsignore`、`.gitignore`、`GITHUB.md`、`README.md`、`index.html`、`package.json`、`package-lock.json`、`serve.py`、`wrangler.toml`
-- 資料夾：`models`、`screenshots`、`server`、`src`、`vendor`
+- 檔案：`.gitignore`、`GITHUB.md`、`README.md`、`index.html`、`package.json`、`package-lock.json`、`serve.py`、`wrangler.toml`
+- 資料夾：`models`、`screenshots`、`scripts`、`server`、`src`、`vendor`
 
 ### A3. 拖曳上傳
 
@@ -97,7 +97,7 @@ git config --global user.email "你的Email"
 
 | 排除項目 | 原因 |
 | --- | --- |
-| `node_modules/`、`dist/`、`.wrangler/` | 以後做連線版、用 Node 時才會出現，都可以重新產生 |
+| `node_modules/`、`dist/`、`.wrangler/` | 安裝 wrangler、部署時產生的，都可以重新產生（`node_modules` 裡還有 129 MB 的大檔案） |
 | `.env`、`.dev.vars`、`*.pem`、`*.key` | 密碼、API 金鑰這類機密，**永遠不要上傳** |
 | `blender/out/` | Blender 產生的中間檔。遊戲實際讀的是 `models/` 裡的複本，那份會上傳 |
 | `blender/src/`（裡面是 `ual.glb`） | 這個檔案裡有 8 個 `fly*` 動作是 three-player-controller 作者另外加的，授權不明，不要公開散布。要重建角色時，照 README「角色」一節自己下載 |
@@ -191,6 +191,39 @@ git push
 - 免費帳號只有 Public 儲存庫可以開 Pages。Private 儲存庫要付費方案。
 - Pages 上的網站任何人都看得到，原始碼也一樣。
 - 網址加 `?test` 會進入自動化測試模式（沒有滑鼠鎖定也不會暫停）。一般玩家用不到，不用特別處理。
+
+## 8.5 讓 Cloudflare 自動跟著 GitHub 更新（連線版）
+
+設定一次之後，只要 GitHub 的 main 分支有新的 commit（不論用網頁上傳還是 `git push`），Cloudflare 就會自動重新部署連線版。這是 Cloudflare 內建的 **Workers Builds**，不用另外寫設定檔。
+
+1. 登入 <https://dash.cloudflare.com>，左側選 **Workers & Pages**。
+2. 連接 GitHub 儲存庫：
+   - **還沒部署過**：按 **Create → Import a repository**（中文介面是「匯入存放庫」），第一次會要你授權 Cloudflare 讀取 GitHub。可以只授權 `neon-grid-tpc` 這一個儲存庫。
+   - **已經用 `npx wrangler deploy` 部署過**：點進 `neon-grid-tpc` 這個 Worker，到 **Settings → Builds → Connect**，選你的 GitHub 儲存庫。
+3. 設定照下表填：
+
+   | 欄位 | 填什麼 |
+   | --- | --- |
+   | Project / Worker name | `neon-grid-tpc`（必須跟 `wrangler.toml` 第一行的 `name` 一樣，否則部署會失敗） |
+   | Production branch | `main` |
+   | Build command | 留空（這個專案不用建置） |
+   | Deploy command | `npx wrangler deploy` |
+   | Root directory | 留空或 `/`（`wrangler.toml` 在儲存庫最上層） |
+
+4. 按 Save / Deploy，第一次會馬上部署一次。到 **Deployments** 或 **Builds** 頁籤看紀錄，成功後網址跟手動部署時一樣：`https://neon-grid-tpc.<你的子網域>.workers.dev`。
+
+之後的流程：
+
+1. 改程式。
+2. 上傳到 GitHub：網頁上傳，或 `git push`。
+3. 等一兩分鐘，Cloudflare 自動部署完成。玩家重新整理頁面就是新版。
+
+要注意的地方：
+
+- **GitHub 上要有部署需要的檔案**：`wrangler.toml`、`package.json`、`package-lock.json`、`scripts/`、`server/`、`src/`、`vendor/`、`models/`、`index.html`。方式 A 的上傳清單已經全部包含。
+- **不要把 Cloudflare API Token 放進儲存庫。** Workers Builds 是用你在網頁上的授權，不需要 Token。
+- **部署失敗時**：到 Builds 頁籤看紀錄。最常見的原因是 Worker 名稱跟 `wrangler.toml` 的 `name` 不一致，或 GitHub 上少了檔案。
+- **GitHub Pages 和 Cloudflare 可以同時開**：Pages 那份只能玩單人；Cloudflare 那份可以單人也可以連線。
 
 ## 9. 授權與致謝
 
