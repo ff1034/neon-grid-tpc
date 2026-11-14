@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>NEON GRID TPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+<!-- 不需要建置：three / three-mesh-bvh / three-player-controller 都放在 vendor/，用 import map 直接載入 ESM -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/examples/jsm/": "./vendor/three/jsm/",
+    "three/addons/": "./vendor/three/jsm/",
+    "three-mesh-bvh": "./vendor/three-mesh-bvh/index.module.js",
+    "three-player-controller": "./vendor/three-player-controller/index.mjs"
+  }
+}
+</script>
+</head>
+<body>
+<div id="game"></div>
+
+<!-- 載入畫面 -->
+<div id="boot"><div><div class="logo">NEON GRID <b>TPC</b></div><div class="bar"><i></i></div><div class="t" id="bootText">載入中</div></div></div>
+
+<!-- 主選單 -->
+<div id="menu" class="screen hidden">
+  <div class="menu-card">
+    <h1 class="logo big">NEON GRID <b>TPC</b></h1>
+    <p class="sub">霓虹競技場・第一人稱射擊<small>three-player-controller 版</small></p>
+    <div class="field"><label>地圖</label><div class="seg" id="optArena"></div></div>
+    <div class="field"><label>模式</label><div class="seg" id="optMode"></div></div>
+    <div class="row2">
+      <div class="field"><label>難度</label><div class="seg" id="optDiff"></div></div>
+      <div class="field"><label>機器人</label><div class="seg" id="optBots"></div></div>
+    </div>
+    <button id="startBtn" class="primary">單人對戰機器人</button>
+    <div class="field online"><label>連線對戰（伺服器決定地圖與模式，最多 8 人，不足 4 人由機器人補）</label>
+      <div class="row-online"><input id="nameInput" maxlength="16" placeholder="暱稱" autocomplete="off"><button id="onlineBtn">連線對戰</button></div>
+      <div id="netStatus" class="help"></div></div>
+    <div class="help" id="helpDesk">WASD 移動・空白鍵 跳・滑鼠 瞄準／左鍵 射擊・R 換彈・1 2 3／Q／滾輪 換槍・Tab 計分板・Esc 暫停</div>
+    <div class="help" id="helpTouch">左下搖桿移動・右半邊拖曳轉視角・FIRE 按住射擊（按住時也能拖曳瞄準）・R 換彈・⇄ 換槍</div>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud" class="hidden">
+  <div id="cross"><i></i><i></i><i></i><i></i><b></b></div>
+  <div id="hitmark"></div>
+  <div id="dmgflash"></div>
+  <div id="top"><div id="mode"></div><div id="timer">5:00</div><div id="scoreline"></div></div>
+  <div id="zone" class="hidden"></div>
+  <div id="feed"></div>
+  <div id="center-msg"></div>
+  <div id="shieldBox"><div class="lbl">護盾</div><div class="bar"><i id="shieldBar"></i></div><div id="shieldNum">100</div><div id="boostTag" class="hidden">加速</div></div>
+  <div id="weaponBox"><div id="wname"></div><div id="ammo"><b id="ammoNow">24</b>/<span id="ammoMax">24</span></div><div id="wslots"></div><div id="reloadBar"><i></i></div></div>
+  <div id="board" class="hidden"></div>
+  <button id="pauseBtn" class="touch-only" aria-label="暫停">II</button>
+  <div id="touchBtns" class="touch-only">
+    <button id="tFire">FIRE</button>
+    <button id="tReload">R</button>
+    <button id="tSwap">⇄</button>
+  </div>
+</div>
+
+<!-- 死亡 -->
+<div id="death" class="hidden"><div class="d1">已被淘汰</div><div class="d2" id="deathBy"></div><div class="d3" id="deathT"></div></div>
+
+<!-- 暫停 -->
+<div id="pause" class="screen hidden"><div class="menu-card small">
+  <h2>暫停</h2>
+  <button id="resumeBtn" class="primary">繼續（點擊鎖定滑鼠）</button>
+  <button id="quitBtn">回主選單</button>
+</div></div>
+
+<!-- 結算 -->
+<div id="results" class="screen hidden"><div class="menu-card">
+  <h2 id="resTitle">對戰結束</h2>
+  <div id="resTable"></div>
+  <button id="againBtn" class="primary">再來一場</button>
+  <button id="menuBtn">回主選單</button>
+</div></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
