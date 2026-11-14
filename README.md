@@ -262,8 +262,32 @@ three-player-controller 的移動和碰撞都在瀏覽器裡計算，做不到�
 - **沒有設定頁。** 靈敏度、音量、畫質都用預設值，只有選單裡的選項會記在 localStorage。
 - **手機上的鏡頭轉動**由套件的觸控視角負責；原版有自訂的加速度曲線。
 
-## 授權
+## 授權與第三方素材
 
-- `vendor/three`、`vendor/three-mesh-bvh`、`vendor/three-player-controller` 都是 MIT 授權，各自的 LICENSE 檔在同一個資料夾裡。
-- 角色身體和動作：Quaternius Universal Animation Library（CC0），檔案取自 three-player-controller 範例。
-- 地圖、武器、道具模型和規則程式來自原版 NEON GRID；角色裝甲由 `blender/gen_mech_ual.py` 生成。
+| 內容 | 作者／來源 | 授權 | 說明 |
+| --- | --- | --- | --- |
+| three.js r169（`vendor/three`） | three.js authors | MIT | 授權全文在 `vendor/three/LICENSE` |
+| three-mesh-bvh 0.8.3（`vendor/three-mesh-bvh`） | Garrett Johnson | MIT | 授權全文在 `vendor/three-mesh-bvh/LICENSE` |
+| three-player-controller 0.6.3（`vendor/three-player-controller`） | 屈航（GitHub：hh-hang） | MIT | 授權全文在 `vendor/three-player-controller/LICENSE`；本專案借用它的架構，沒有修改它的程式碼 |
+| Universal Animation Library（角色身體與動作） | [Quaternius](https://quaternius.com/packs/universalanimationlibrary.html) | CC0 1.0（推定，依據見「角色」一節） | 取自 three-player-controller 範例的 `ual.glb`；其中 8 個 fly* 動作授權不明，沒有使用、沒有收錄在本專案 |
+| Chakra Petch、Noto Sans TC 字型 | Google Fonts | SIL Open Font License 1.1 | 網頁執行時才從 Google Fonts 載入，沒有收錄在本專案 |
+| 地圖、武器、道具模型與遊戲規則程式（`shared.js`、`bot.js`） | 本專案作者（原版 NEON GRID） | 本專案作者保留權利，見下方 | 原創內容 |
+| 角色裝甲、`src/` 其餘程式、Blender 腳本 | 本專案作者 | 本專案作者保留權利，見下方 | 原創內容 |
+
+- 本專案的原創內容目前**沒有附上開放授權**，在法律上表示著作權人保留所有權利：可以瀏覽和遊玩，但未經同意不得複製、修改或再散布。若日後在專案根目錄加入 `LICENSE` 檔，以該檔案為準。
+- 第三方素材各自適用原作者的授權條款，不因收錄在本專案而改變。使用者若要另行使用，請以原作者公布的授權為準。
+
+## 免責聲明
+
+1. **按現狀提供**：本專案以「現狀」（as is）提供，不保證沒有錯誤、適合特定用途、或可以不中斷地運作。使用本專案（含原始碼、模型、部署方式與說明文件）所產生的任何直接或間接損害，作者不負賠償責任。
+2. **授權資訊僅供參考**：本文件中對第三方素材授權的說明，是作者依公開資訊整理的結果，**不構成法律意見**。
+   - 部分素材的授權是「推定」：例如 Universal Animation Library 是依動作名稱、數量與官方頁面比對，沒有取得原作者的書面確認。
+   - 引用、修改或再散布本專案任何內容之前，請自行向原作者查證授權條款，並自行承擔使用的法律責任。
+3. **無關聯、無背書**：本專案與 Quaternius、three.js、three-mesh-bvh、three-player-controller 的作者，以及 Cloudflare、GitHub、Google 等公司**沒有任何合作、贊助或背書關係**。文中提及的產品名稱與商標屬於各自的權利人，只用於說明相容性與來源。
+4. **原創性**：遊戲名稱、角色、地圖與美術均為本專案原創設計，不是任何既有商業遊戲的重製或衍生作品。如有雷同純屬巧合；若您認為某部分侵害了您的權利，請依第 7 點聯絡，作者將在確認後儘速移除或修正。
+5. **連線服務**：
+   - 自行部署的連線伺服器由部署者自行負責，包括服務條款、費用、資料與內容管理。
+   - 遊戲只傳送玩家自行輸入的暱稱與遊戲中的位置、動作資料，不蒐集其他個人資料，也不永久保存對戰紀錄。
+   - 玩家暱稱由玩家自行輸入，內容責任由輸入者自負。
+6. **第三方服務**：遊戲執行時會連線到 Google Fonts 載入字型；部署在 Cloudflare 或 GitHub Pages 時，也適用這些服務自身的條款與隱私權政策。
+7. **權利問題聯絡**：若您是本專案所用素材的權利人，對使用方式有疑慮，請在本專案的 GitHub 頁面開 Issue 說明，作者將儘速處理。
