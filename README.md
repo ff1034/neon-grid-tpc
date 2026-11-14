@@ -1,3 +1,4 @@
+本專案僅作為個人練習用 不用於任何商業行為
 # NEON GRID TPC
 
 這是 NEON GRID 的第一人稱射擊新版，可以單人對戰機器人，也可以連線對戰（Cloudflare Workers）。移動與相機改用 [three-player-controller](https://github.com/hh-hang/three-player-controller)（MIT）。地圖、武器、道具和遊戲規則都沿用原版（`Downloads\neon-grid-online_2\neon-grid-online`）；角色改用新做的機甲（見下方「角色」）。原版沒有被改動，這裡只複製了它的模型、`shared.js` 和 `bot.js`。
